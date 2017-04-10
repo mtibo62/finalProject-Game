@@ -7,11 +7,15 @@ import basicgraphics.SpriteCollisionEvent;
 import basicgraphics.SpriteComponent;
 import basicgraphics.sounds.ReusableClip;
 import java.applet.AudioClip;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import javax.swing.JOptionPane;
+import java.util.List;
 
 
 public class Enemy extends Sprite {
-    public static int health;
+    public static int health = 5;
+    List<Integer> health2 = new LinkedList<Integer>();
     SpriteComponent sc;
     static int enemyCount;
     
@@ -32,6 +36,7 @@ public class Enemy extends Sprite {
 
     public void init(SpriteComponent sc) {
         setPicture(Game.makeBall(Game.ENEMY_COLOR, Game.BIG));
+        
         while (true) {
             setX(Game.RAND.nextInt(Game.BOARD_SIZE.width)-Game.SMALL);
             setY(Game.RAND.nextInt(Game.BOARD_SIZE.height)-Game.SMALL);
@@ -54,18 +59,18 @@ public class Enemy extends Sprite {
     @Override
     public void processEvent(SpriteCollisionEvent se) {
         if(se.eventType == CollisionEventType.WALL_INVISIBLE) {
-            if (se.xlo) {
-                setX(sc.getSize().width - getWidth());
-            }
-            if (se.xhi) {
-                setX(0);
-            }
-            if (se.ylo) {
-                setY(sc.getSize().height - getHeight());
-            }
-            if (se.yhi) {
-                setY(0);
-            }
+                     if (se.xlo) {
+                          setVelX(Math.abs(getVelX()));
+                      }
+                      if (se.xhi) {
+                          setVelX(-Math.abs(getVelX()));
+                      }
+                      if (se.ylo) {
+                          setVelY(Math.abs(getVelY()));
+                      }
+                      if (se.yhi) {
+                          setVelY(-Math.abs(getVelY()));
+                      }
         }
 
         if (se.eventType == CollisionEventType.SPRITE) {
@@ -77,7 +82,7 @@ public class Enemy extends Sprite {
             }
             if (se.sprite2 instanceof Bullet) {
                 clip.play();
-                health -= Bullet.damage;
+               health -= Bullet.damage;
                 if(health <= 0){
                     setActive(false);
                 }
@@ -86,6 +91,20 @@ public class Enemy extends Sprite {
                     JOptionPane.showMessageDialog(sc, "You win! Game Over!");
                     System.exit(0);
                 }
+            }
+            if (se.sprite2 instanceof Wall) {
+                      if (se.xlo) {
+                          setVelX(Math.abs(getVelX()));
+                      }
+                      if (se.xhi) {
+                          setVelX(-Math.abs(getVelX()));
+                      }
+                      if (se.ylo) {
+                          setVelY(Math.abs(getVelY()));
+                      }
+                      if (se.yhi) {
+                          setVelY(-Math.abs(getVelY()));
+                      }
             }
         }
     }

@@ -1,4 +1,3 @@
-
 package basicshooter;
 
 import basicgraphics.CollisionEventType;
@@ -25,21 +24,21 @@ public class Shooter extends Sprite {
         sprite = sc;
     }
 
-     @Override
-              public void processEvent(SpriteCollisionEvent ce) {
-                  if (ce.eventType == CollisionEventType.WALL) {
-                      if (ce.xlo) {
-                          setVelX(Math.abs(getVelX()));
-                      }
-                      if (ce.xhi) {
-                          setVelX(-Math.abs(getVelX()));
-                      }
-                      if (ce.ylo) {
-                          setVelY(Math.abs(getVelY()));
-                      }
-                      if (ce.yhi) {
-                          setVelY(-Math.abs(getVelY()));
-                      }
+    @Override
+    public void processEvent(SpriteCollisionEvent ce) {
+        if (ce.eventType == CollisionEventType.WALL) {
+            if (ce.xlo) {
+                setVelX(0);
+            }
+            if (ce.xhi) {
+                setVelX(0);
+            }
+            if (ce.ylo) {
+                setVelY(0);
+            }
+            if (ce.yhi) {
+                setVelY(0);
+            }
 //    public void init2( int direction) {
 //        
 //        if (direction == KeyEvent.VK_RIGHT) {
@@ -52,6 +51,7 @@ public class Shooter extends Sprite {
 //            setVelY(3);
 //        }
 //    }
-}
-              }
+        }
+
+    }
 }
