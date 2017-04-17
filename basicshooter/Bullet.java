@@ -1,49 +1,55 @@
-
 package basicshooter;
 
+import basicgraphics.CollisionEventType;
 import basicgraphics.Sprite;
 import basicgraphics.SpriteCollisionEvent;
 import basicgraphics.SpriteComponent;
 import java.awt.event.KeyEvent;
 
 class Bullet extends Sprite {
-    public static int damage = 1;
-    public void init(SpriteComponent sc,Sprite sp,int direction) {
-        if(Upgrade.red == true && (direction == KeyEvent.VK_W||direction == KeyEvent.VK_A||direction == KeyEvent.VK_S||direction == KeyEvent.VK_D)){
-            setPicture(Game.makeBall(Game.BULLET_COLOR, Game.BIG));
-            setX(sp.getX()+(Game.BIG-Game.SMALL)/2);
-            setY(sp.getY()+(Game.BIG-Game.SMALL)/2);
-            if(direction == KeyEvent.VK_S)
-                setVelY(5.0);
-            else if(direction == KeyEvent.VK_W)
-                setVelY(-5.0);
-            else if(direction == KeyEvent.VK_D)
-                setVelX(5.0);
-            else if(direction == KeyEvent.VK_A)
-                setVelX(-5.0);
-            sc.addSprite(this);
-        }else if(direction == KeyEvent.VK_W||direction == KeyEvent.VK_A||direction == KeyEvent.VK_S||direction == KeyEvent.VK_D){
-            
-            setPicture(Game.makeBall(Game.BULLET_COLOR, Game.BIG));
-            setX(sp.getX()+(Game.BIG-Game.SMALL)/2);
-            setY(sp.getY()+(Game.BIG-Game.SMALL)/2);
 
-            if(direction == KeyEvent.VK_S)
+    public static int damage = 1;
+
+    public void init(SpriteComponent sc, Sprite sp, int direction) {
+        if (Upgrade.red == true && (direction == KeyEvent.VK_W || direction == KeyEvent.VK_A || direction == KeyEvent.VK_S || direction == KeyEvent.VK_D)) {
+            setPicture(Game.makeBall(Game.BULLET_COLOR, Game.BIG));
+            setX(sp.getX() + (Game.BIG - Game.SMALL) / 2);
+            setY(sp.getY() + (Game.BIG - Game.SMALL) / 2);
+            if (direction == KeyEvent.VK_S) {
                 setVelY(5.0);
-            else if(direction == KeyEvent.VK_W)
+            } else if (direction == KeyEvent.VK_W) {
                 setVelY(-5.0);
-            else if(direction == KeyEvent.VK_D)
+            } else if (direction == KeyEvent.VK_D) {
                 setVelX(5.0);
-            else if(direction == KeyEvent.VK_A)
+            } else if (direction == KeyEvent.VK_A) {
                 setVelX(-5.0);
+            }
             sc.addSprite(this);
-            
+        } else if (direction == KeyEvent.VK_W || direction == KeyEvent.VK_A || direction == KeyEvent.VK_S || direction == KeyEvent.VK_D) {
+
+            setPicture(Game.makeBall(Game.BULLET_COLOR, Game.BIG));
+            setX(sp.getX() + (Game.BIG - Game.SMALL) / 2);
+            setY(sp.getY() + (Game.BIG - Game.SMALL) / 2);
+
+            if (direction == KeyEvent.VK_S) {
+                setVelY(5.0);
+            } else if (direction == KeyEvent.VK_W) {
+                setVelY(-5.0);
+            } else if (direction == KeyEvent.VK_D) {
+                setVelX(5.0);
+            } else if (direction == KeyEvent.VK_A) {
+                setVelX(-5.0);
+            }
+            sc.addSprite(this);
+
         }
     }
-    
+
     @Override
     public void processEvent(SpriteCollisionEvent se) {
-        if(se.sprite2 instanceof Shooter) {
+        if (se.sprite2 instanceof Shooter) {
+        } else if (se.eventType == CollisionEventType.WALL) {
+            setActive(false);
         } else {
             setActive(false);
         }

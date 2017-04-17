@@ -6,21 +6,14 @@ import basicgraphics.images.Picture;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Random;
-import javax.swing.JOptionPane;
 import basicgraphics.*;
 import java.awt.Image;
 import java.io.IOException;
-import static java.lang.Math.abs;
 import javax.swing.JOptionPane;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
+import java.util.ArrayList;
 
 public class Game {
 
@@ -31,8 +24,9 @@ public class Game {
     final public static Color EXPLOSION_COLOR = Color.orange;
     final public static int BIG = 20;
     final public static int SMALL = 5;
-    final public static int ENEMIES = 12;
-    final public static Dimension BOARD_SIZE = new Dimension(1000, 1000);
+    final public static int ENEMIES = 50;
+    final public static Dimension BOARD_SIZE = new Dimension(1500, 1500);
+    public static int shooterHealth = 4;
 
     BasicFrame bf = new BasicFrame("Shooter!");
 
@@ -47,16 +41,9 @@ public class Game {
     public static void main(String[] args) throws IOException {
         final BasicFrame bf = new BasicFrame("Lunar Lander");
         final SpriteComponent sc = new SpriteComponent();
-        sc.setSize(1000, 1000);
+        sc.setSize(1500, 1500);
         sc.setPreferredSize(sc.getSize());
-        final Shooter Shooter = new Shooter();
-        Shooter.init(sc);
-        final Upgrade l = new Upgrade();
-        l.init(sc);
-        final Wall w = new Wall();
-        w.init(sc);
-        bf.add("sc", sc, 0, 0, 1, 1);
-
+        
         bf.addMenuAction("Help", "Game Instructions", new Runnable() {
             @Override
             public void run() {
@@ -64,23 +51,65 @@ public class Game {
             }
         });
 
-        for (int i = 0; i < ENEMIES; i++) {
-            Enemy en = new Enemy();
-            en.init(sc);
+        final Shooter s = new Shooter();
+        s.init(sc);
+
+        final Upgrade l = new Upgrade();
+        l.init(sc);
+
+        final speedupgrade su = new speedupgrade();
+        su.init(sc);
+
+        ArrayList<Wall> walls = new ArrayList<Wall>();
+        for (int i = 0; i < 30; i++) {
+            final Wall w = new Wall();
+            w.init(sc, 50 * i, 30);
+            walls.add(w);
         }
+        for (int i = 0; i < 30; i++) {
+            final Wall w = new Wall();
+            w.init(sc, 50 * i, Game.BOARD_SIZE.height - 50);
+            walls.add(w);
+        }
+
+        for (int i = 0; i < 30; i++) {
+            final Wall w = new Wall();
+            w.init(sc, 0, 50 * i);
+            walls.add(w);
+        }
+        for (int i = 0; i < 30; i++) {
+            final Wall w = new Wall();
+            w.init(sc, Game.BOARD_SIZE.width - 50, 50 * i);
+            walls.add(w);
+        }
+
+        final Wall w = new Wall();
+        w.init(sc, 400, 400);
+
+        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+        for (int i = 0; i < ENEMIES; i++) {
+            final Enemy e = new Enemy();
+            e.init(sc);
+            enemies.add(e);
+        }
+
+        final tophud h = new tophud();
+        h.init(sc, 0, 0);
+
+        bf.add("sc", sc, 0, 0, 1, 1);
 
         bf.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent ke) {
                 Bullet b = new Bullet();
-                b.init(sc, Shooter, ke.getKeyCode());
+                b.init(sc, s, ke.getKeyCode());
                 Control c = new Control();
-                c.init(Shooter, ke.getKeyCode());
+                c.init(s, ke.getKeyCode());
             }
 
             public void keyReleased(KeyEvent ke) {
                 Control c = new Control();
-                c.init2(Shooter, ke.getKeyCode());
+                c.init2(s, ke.getKeyCode());
             }
         });
 
