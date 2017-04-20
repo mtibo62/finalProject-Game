@@ -52,13 +52,9 @@ public class Shooter extends Sprite {
                 }
                 else if (getVelY() > 0) {
                     setY(ce.sprite2.getY() - getHeight()-5);
-                }
-
-               
+                }       
             }
-
         }
-
     }
 }
 

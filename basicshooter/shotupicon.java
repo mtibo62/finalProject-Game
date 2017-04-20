@@ -5,13 +5,14 @@ import basicgraphics.SpriteComponent;
 import basicgraphics.images.Picture;
 import java.io.IOException;
 
-public class Wall extends Sprite {
-
-    public void init(SpriteComponent sc, int X, int Y) throws IOException {
-        SpriteComponent sprite;
+public class shotupicon extends Sprite{
+    
+    static SpriteComponent se;
+    
+    public void init(SpriteComponent sc, int X, int Y) throws IOException {       
         setX(X);
         setY(Y);
-        setPicture(new Picture("wall.png"));
+        setPicture(new Picture("shotsmall.png"));
         sc.addSprite(this);
     }
 }

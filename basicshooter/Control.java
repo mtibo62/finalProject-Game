@@ -15,7 +15,6 @@ public class Control extends Sprite {
     public static boolean rightMove = false;
     public static boolean leftMove = false;
     
-
     public void init(Sprite sp, int direction) {
  
         switch (direction) {

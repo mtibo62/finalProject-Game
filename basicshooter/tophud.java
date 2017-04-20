@@ -6,34 +6,45 @@ import basicgraphics.Sprite;
 import basicgraphics.images.Picture;
 
 public class tophud extends Sprite {
-    
+
     public static int healthBar = 4;
+    static SpriteComponent se;
+
+//    public void init(SpriteComponent sc, int X, int Y) throws IOException {
+//        se = sc;
+//        setX(X);
+//        setY(Y);
+//        setPicture(new Picture("topbar.png"));
+//        se.addSprite(this);
+//    }
+
 
     public void init(SpriteComponent sc, int X, int Y) throws IOException {
+        se = sc;
         setX(X);
         setY(Y);
         if (Control.high == false && Upgrade.red == true) {
-            switch (Game.shooterHealth) {
-                case 4:
-                    setPicture(new Picture("fullhealth.png"));
-                    break;
-                case 3:
-                    setPicture(new Picture("fullhealth-1.png"));
-                    break;
-                case 2:
-                    setPicture(new Picture("fullhealth-2.png"));
-                    break;
-                case 1:
-                    setPicture(new Picture("fullhealth-3.png"));
-                    break;
-                case 0:
-                    setPicture(new Picture("nohealth.png"));
-                    break;
-                default:
-                    break;
+            if (Game.shooterHealth == 4) {
+
+                setPicture(new Picture("fullhealth.png"));
             }
-            sc.addSprite(this);
-            
+            if (Game.shooterHealth == 3) {
+                setPicture(new Picture("fullhealth-1.png"));
+            }
+            if (Game.shooterHealth == 2) {
+                setPicture(new Picture("fullhealth-2.png"));
+            }
+
+            if (Game.shooterHealth == 1) {
+                setPicture(new Picture("fullhealth-3.png"));
+            }
+
+            if (Game.shooterHealth == 0) {
+                setPicture(new Picture("nohealth.png"));
+            }
+
+            se.addSprite(this);
+
         } else if (Control.high == true && Upgrade.red == true) {
             switch (Game.shooterHealth) {
                 case 4:
@@ -54,8 +65,8 @@ public class tophud extends Sprite {
                 default:
                     break;
             }
-            sc.addSprite(this);
-            
+            se.addSprite(this);
+
         } else if (Control.high == false && Upgrade.red == false) {
             switch (Game.shooterHealth) {
                 case 4:
@@ -76,10 +87,9 @@ public class tophud extends Sprite {
                 default:
                     break;
             }
-            sc.addSprite(this);
-           
-        }
-        else if (Control.high == true && Upgrade.red == false) {
+            se.addSprite(this);
+
+        } else if (Control.high == true && Upgrade.red == false) {
             switch (Game.shooterHealth) {
                 case 4:
                     setPicture(new Picture("fullhealth-both.png"));
@@ -99,10 +109,7 @@ public class tophud extends Sprite {
                 default:
                     break;
             }
-            sc.addSprite(this);
-            
+            se.addSprite(this);
         }
-
     }
-
 }
