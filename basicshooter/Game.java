@@ -30,15 +30,14 @@ public class Game {
     final public static Color EXPLOSION_COLOR = Color.orange;
     final public static int BIG = 20;
     final public static int SMALL = 5;
-    final public static int ENEMIES = 8;
+    public static int numEnemies;
     final public static Dimension BOARD_SIZE = new Dimension(1500, 1500);
     public static int shooterHealth = 4;
     public static int level = 0;
 
     BasicFrame bf = new BasicFrame("Ball Game");
-    
-//    static ArrayList<health> health = new ArrayList<health>();
 
+//    static ArrayList<health> health = new ArrayList<health>();
     static Picture makeBall(Color color, int size) {
         Image im = BasicFrame.createImage(size, size);
         Graphics g = im.getGraphics();
@@ -47,9 +46,9 @@ public class Game {
         return new Picture(im);
     }
 
-    public static void main(String[] args) throws IOException{
-        
-       final BasicFrame bf = new BasicFrame("Ball Game");
+    public static void main(String[] args) throws IOException {
+
+        final BasicFrame bf = new BasicFrame("Ball Game");
         final SpriteComponent sc = new SpriteComponent();
         sc.setSize(1500, 1500);
         sc.setPreferredSize(sc.getSize());
@@ -57,7 +56,7 @@ public class Game {
         bf.addMenuAction("Help", "Game Instructions", new Runnable() {
             @Override
             public void run() {
-                JOptionPane.showMessageDialog(bf.getContentPane(), "Press 1, 2, or 3!");
+                JOptionPane.showMessageDialog(bf.getContentPane(), "Kill all enemies");
             }
         });
 
@@ -70,113 +69,240 @@ public class Game {
             public void keyPressed(KeyEvent e) {
                 System.out.println("pressed: " + e.getKeyText(e.getKeyCode()));
             }
+
             @Override
             public void keyReleased(KeyEvent e) {
             }
         };
         bf.addKeyListener(kl);
-        
-//        try{
-//        int i = 0;
-//        Scanner scan = new Scanner(System.in);
-//        System.out.println("Enter imput file name: ");
-//        String fileName = scan.next();
-//        
-//        File input = new File(fileName);
-//        Scanner in = new Scanner(input);
-//        
-//        
-//        while(in.hasNext()){
-//            String let = in.next();
-//            
-//            if(let.compareTo("W") == 0){
-//            final Wall w = new Wall();
-//            w.init(sc, 50 * i, 30);
-//            
-//            }
-//        }
-//        
-//        }catch(FileNotFoundException exception){
-            
-        final Shooter s = new Shooter();
-        s.init(sc);
 
-        final Upgrade l = new Upgrade();
-        l.init(sc);
-        final speedupgrade su = new speedupgrade();
-        su.init(sc);
-        final doubleshotup ds = new doubleshotup();
-        ds.init(sc);
+        try {
+            System.out.println("**Guide to making file**");
+            System.out.println();
+            System.out.println("Text deminsions in file must be '28 x 28', not including spaces. And an additional 'P' must be added at the nd of each line.");
+            System.out.println("In order to place a Wall, type 'W'");
+            System.out.println("In order to place a Player, type 'S'");
+            System.out.println("In order to place a Shooter Upgrade, type 'S'");
+            System.out.println("In order to place a Shot Upgrade, type '1'");
+            System.out.println("In order to place a Speed Upgrade, type '2'");
+            System.out.println("In order to place a Double Shot Upgrade, type '3'");
+            System.out.println("In order to place an Enemy, type 'E'");
+            System.out.println("In order to leave an empty space, use any other character of your chooseing.");
+            System.out.println();
+            System.out.println("Use file 'test.txt' for an example or use it's contents to build your own!");
+            System.out.println();
+            System.out.println("Enter nothing for the text file to play on blank board.");
 
-        ArrayList<topwall> walls = new ArrayList<topwall>();
-        for (int i = 0; i < 30; i++) {
-            final topwall w = new topwall();
-            w.init(sc, 50 * i, 30);
-            walls.add(w);
-        }
-        for (int i = 0; i < 30; i++) {
-            final topwall w = new topwall();
-            w.init(sc, 50 * i, Game.BOARD_SIZE.height - 50);
-            walls.add(w);
-        } 
-        
-        ArrayList<sidewall> walls2 = new ArrayList<sidewall>();
-        for (int i = 0; i < 30; i++) {
-            final sidewall w = new sidewall();
-            w.init(sc, 0, 50 * i);
-            walls2.add(w);
-        }
-        for (int i = 0; i < 30; i++) {
-            final sidewall w = new sidewall();
-            w.init(sc, Game.BOARD_SIZE.width - 50, 50 * i);
-            walls2.add(w);
-        }
+            Scanner scan = new Scanner(System.in);
+            System.out.print("Enter input file name: ");
+            String fileName = scan.next();
+            System.out.println();
 
-        final Wall w = new Wall();
-        w.init(sc, 400, 400);
+            File input = new File(fileName);
+            Scanner in = new Scanner(input);
 
-        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-        for (int i = 0; i < ENEMIES; i++) {
-            final Enemy e = new Enemy();
-            e.init(sc);
-            enemies.add(e);
-        }
+            final Shooter s = new Shooter();
+            bf.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent ke) {
+                    Bullet b = new Bullet();
+                    b.init(sc, s, ke.getKeyCode());
+                    Control c = new Control();
+                    c.init(s, ke.getKeyCode());
+                }
 
-        bf.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent ke) {
-                Bullet b = new Bullet();
-                b.init(sc, s, ke.getKeyCode());
-                Control c = new Control();
-                c.init(s, ke.getKeyCode());
+                public void keyReleased(KeyEvent ke) {
+                    Control c = new Control();
+                    c.init2(s, ke.getKeyCode());
+                    Bullet b = new Bullet();
+                    b.init2(sc, s, ke.getKeyCode(), 5, 5);
+                    Bullet b2 = new Bullet();
+                    b2.init2(sc, s, ke.getKeyCode(), -5, -5);
+                }
+            });
+
+            while (in.hasNext()) {
+
+                String let;
+                int i = 1;
+
+                ArrayList<Wall> walls = new ArrayList<Wall>();
+                ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+                ArrayList<speedupgrade> speedup = new ArrayList<speedupgrade>();
+                ArrayList<doubleshotup> doubleup = new ArrayList<doubleshotup>();
+                ArrayList<Upgrade> shotup = new ArrayList<Upgrade>();
+                //ArrayList<Shooter> shoot = new ArrayList<Shooter>();
+
+                //s.init(sc);
+//                for (int i = 1; in.hasNextLine(); i++) {
+                //in = nextLine();
+                for (int j = 1; in.hasNext(); j++) {
+                    let = in.next();
+                    if (let.equals("W") || let.equals("w")) {
+                        final Wall w = new Wall();
+                        w.init(sc, 50 * j, 50 * i + 30);
+                        walls.add(w);
+                    } else if (let.equals("S") || let.equals("s")) {
+                        s.init(sc, 50 * j, 50 * i + 30);
+                    } else if (let.equals("E") || let.equals("e")) {
+                        final Enemy e = new Enemy();
+                        e.init(sc, 50 * j, 50 * i + 30);
+                        enemies.add(e);
+                    } else if (let.equals("1")) {
+                        final Upgrade l = new Upgrade();
+                        l.init(sc, 50 * j, 50 * i + 30);
+                    } else if (let.equals("2")) {
+                        final speedupgrade su = new speedupgrade();
+                        su.init(sc, 50 * j, 50 * i + 30);
+                    } else if (let.equals("3")) {
+                        final doubleshotup ds = new doubleshotup();
+                        ds.init(sc, 50 * j, 50 * i + 30);
+                    } else if (let.equals("P") || let.equals("p")) {
+                        i++;
+                        j = 0;
+                    }
+                }
             }
 
-            public void keyReleased(KeyEvent ke) {
-                Control c = new Control();
-                c.init2(s, ke.getKeyCode());
-                Bullet b = new Bullet();
-                b.init2(sc, s, ke.getKeyCode(),5,5);
-                Bullet b2 = new Bullet();
-                b2.init2(sc, s, ke.getKeyCode(),-5,-5);
+            ArrayList<topwall> walls = new ArrayList<topwall>();
+            for (int i = 0; i < 30; i++) {
+                final topwall w = new topwall();
+                w.init(sc, 50 * i, 30);
+                walls.add(w);
             }
-        });
-        
-        final tophud th = new tophud();
-        th.init(sc, 0, 0);
-        
-       
+            for (int i = 0; i < 30; i++) {
+                final topwall w = new topwall();
+                w.init(sc, 50 * i, Game.BOARD_SIZE.height - 50);
+                walls.add(w);
+            }
+
+            ArrayList<sidewall> walls2 = new ArrayList<sidewall>();
+            for (int i = 0; i < 30; i++) {
+                final sidewall w = new sidewall();
+                w.init(sc, 0, 50 * i);
+                walls2.add(w);
+            }
+            for (int i = 0; i < 30; i++) {
+                final sidewall w = new sidewall();
+                w.init(sc, Game.BOARD_SIZE.width - 50, 50 * i);
+                walls2.add(w);
+            }
+
+            final tophud th = new tophud();
+            th.init(sc, 0, 0);
+
+            bf.add("sc", sc, 0, 0, 1, 1);
+            bf.show();
+            sc.start(0, 10);
+            in.close();
+
+        } catch (FileNotFoundException exception) {
+
+            Scanner scan = new Scanner(System.in);
+            System.out.print("Enter number of enemies: ");
+            while (!scan.hasNextInt()) {
+                System.out.print("Enter number of enemies (must be integer): ");
+                scan.next();
+            }
+            int num = scan.nextInt();
+            numEnemies = num;
+
+            final Shooter s = new Shooter();
+            s.init(sc, 60, 90);
+
+            bf.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent ke) {
+                    Bullet b = new Bullet();
+                    b.init(sc, s, ke.getKeyCode());
+                    Control c = new Control();
+                    c.init(s, ke.getKeyCode());
+                }
+
+                public void keyReleased(KeyEvent ke) {
+                    Control c = new Control();
+                    c.init2(s, ke.getKeyCode());
+                    Bullet b = new Bullet();
+                    b.init2(sc, s, ke.getKeyCode(), 5, 5);
+                    Bullet b2 = new Bullet();
+                    b2.init2(sc, s, ke.getKeyCode(), -5, -5);
+                }
+            });
+
+            final Upgrade l = new Upgrade();
+            l.init(sc, 0, 0);
+            final speedupgrade su = new speedupgrade();
+            su.init(sc, 0, 0);
+            final doubleshotup ds = new doubleshotup();
+            ds.init(sc, 0, 0);
+
+            ArrayList<topwall> walls = new ArrayList<topwall>();
+            for (int i = 0; i < 30; i++) {
+                final topwall w = new topwall();
+                w.init(sc, 50 * i, 30);
+                walls.add(w);
+            }
+            for (int i = 0; i < 30; i++) {
+                final topwall w = new topwall();
+                w.init(sc, 50 * i, Game.BOARD_SIZE.height - 50);
+                walls.add(w);
+            }
+
+            ArrayList<sidewall> walls2 = new ArrayList<sidewall>();
+            for (int i = 0; i < 30; i++) {
+                final sidewall w = new sidewall();
+                w.init(sc, 0, 50 * i);
+                walls2.add(w);
+            }
+            for (int i = 0; i < 30; i++) {
+                final sidewall w = new sidewall();
+                w.init(sc, Game.BOARD_SIZE.width - 50, 50 * i);
+                walls2.add(w);
+            }
+
+            final Wall w = new Wall();
+            w.init(sc, 400, 400);
+
+            ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+            for (int i = 0; i < numEnemies; i++) {
+                final Enemy e = new Enemy();
+                e.init(sc, 0, 0);
+                enemies.add(e);
+            }
+
+            bf.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent ke) {
+                    Bullet b = new Bullet();
+                    b.init(sc, s, ke.getKeyCode());
+                    Control c = new Control();
+                    c.init(s, ke.getKeyCode());
+                }
+
+                public void keyReleased(KeyEvent ke) {
+                    Control c = new Control();
+                    c.init2(s, ke.getKeyCode());
+                    Bullet b = new Bullet();
+                    b.init2(sc, s, ke.getKeyCode(), 5, 5);
+                    Bullet b2 = new Bullet();
+                    b2.init2(sc, s, ke.getKeyCode(), -5, -5);
+                }
+            });
+
+            final tophud th = new tophud();
+            th.init(sc, 0, 0);
+
 //       for(int i = 0; i < 4; i++){
 //       final health h = new health();
 //       h.init(sc,10+20*i,5);
 //       health.add(h);
 //       }
+            bf.add("sc", sc, 0, 0, 1, 1);
 
-        bf.add("sc", sc, 0, 0, 1, 1);
-
-        bf.show();
-        sc.start(0, 10);
+            bf.show();
+            sc.start(0, 10);
+        }
     }
-   
 }
 
 //class upgrade extends Sprite{
@@ -203,9 +329,6 @@ public class Game {
 //        }  
 //    }
 //}
-
-
-
 //        if (level == 1) {
 //            ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 //            for (int i = 0; i < ENEMIES * 1; i++) {
@@ -228,8 +351,6 @@ public class Game {
 //                enemies.add(e);
 //            }
 //        }
-
-
 //                if (e.getKeyCode() == KeyEvent.VK_1) {
 //                    level = 1;
 //                } else if (e.getKeyCode() == KeyEvent.VK_2) {
@@ -237,3 +358,31 @@ public class Game {
 //                } else if (e.getKeyCode() == KeyEvent.VK_3) {
 //                    level = 3;
 //                }
+//            while (in.hasNext()) {
+//                BufferedReader lineReader = new BufferedReader(new FileReader(input));
+//                String let;
+//
+//                ArrayList<Wall> walls = new ArrayList<Wall>();
+//                //ArrayList<Shooter> shoot = new ArrayList<Shooter>();
+//
+//                //s.init(sc);
+//                String line = lineReader.readLine();
+//                for (int i = 1; lineReader.readLine() != null; i++) {
+//                    
+//
+//                    for (int j = 0; j <= line.length(); j++) {
+//                        
+//                        let = String.valueOf(line.charAt(0));
+//                        if (let.equals("W")) {
+//                            final Wall w = new Wall();
+//                            w.init(sc, 50 * j, 50 * i + 100);
+//                            walls.add(w);
+//                        } else if (let.equals("S")) {
+//                            s.init(sc, 50 * j, 50 * i + 100);
+//                        }
+//                        line = line.substring(0,1);
+//                    }
+//                    line = lineReader.readLine();
+//                }
+//
+//            }

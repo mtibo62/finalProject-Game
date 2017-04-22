@@ -9,7 +9,7 @@ public class shotupicon extends Sprite{
     
     static SpriteComponent se;
     
-    public void init(SpriteComponent sc, int X, int Y) throws IOException {       
+    public void init(SpriteComponent sc, int X, int Y) throws IOException{       
         setX(X);
         setY(Y);
         setPicture(new Picture("shotsmall.png"));

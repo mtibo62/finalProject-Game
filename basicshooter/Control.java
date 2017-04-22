@@ -53,7 +53,6 @@ public class Control extends Sprite {
             default:
                 break;
         }
-    
     }
 
     public void init2(Sprite sp, int direction) {

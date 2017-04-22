@@ -131,7 +131,7 @@ public class BasicFrame {
      * @param menuItem
      * @param action 
      */
-    public void addMenuAction(String menuName,String menuItem,final Runnable action) {
+    public void addMenuAction(String menuName,String menuItem, final Runnable action) {
         JMenuBar mb = jf.getJMenuBar();
         MenuHolder mh = menuMap.get(menuName);
         if(mh == null) {

@@ -35,13 +35,13 @@ public class Enemy extends Sprite {
         super.setActive(b);
     }
 
-    public void init(SpriteComponent sc) {
+    public void init(SpriteComponent sc, int X, int Y) {
         int nums = Game.RAND.nextInt(100) + 1;
         if (nums <= 40) {
             setPicture(Game.makeBall(Game.ENEMY_COLOR, Game.BIG));
-            health = 80;
+            health = 5;
         } else if (nums <= 80) {
-            setPicture(Game.makeBall(Color.blue, Game.BIG));
+            setPicture(Game.makeBall(Color.orange, Game.BIG));
             health = 5;
         } else if (nums <= 85) {
             setPicture(Game.makeBall(Color.yellow, Game.BIG));
@@ -50,8 +50,14 @@ public class Enemy extends Sprite {
             setPicture(Game.makeBall(Color.black, Game.BIG));
             health = 8;
         }
-        setX(Game.RAND.nextInt(900) + 450);
-        setY(Game.RAND.nextInt(900) + 450);
+        
+        if (X == 0 || Y == 0) {
+            setX(Game.RAND.nextInt(900) + 450);
+            setY(Game.RAND.nextInt(900) + 450);
+        } else {
+            setX(X);
+            setY(Y);
+        }
         
         // A random speed
         if (nums <= 40) {
@@ -127,8 +133,6 @@ public class Enemy extends Sprite {
                     setVelY(-Math.abs(getVelY()));
                     setVelX(-getVelX());
                 } 
-
-//                Game.health.remove(4);
                 
                 final tophud h = new tophud();
                 try {

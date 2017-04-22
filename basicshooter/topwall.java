@@ -31,7 +31,8 @@ public class topwall extends Sprite {
                     se.sprite2.setVelY(se.sprite2.getVelY() * -1);
                 } else if (se.sprite2.getVelY() > 0 && se.sprite2.getVelX()==0) {
                     se.sprite2.setVelY(-1 * se.sprite2.getVelY());
-                } else if(se.sprite2.getVelX() < 0 && se.sprite2.getVelY() < 0) {
+                }
+                if(se.sprite2.getVelX() < 0 && se.sprite2.getVelY() < 0) {
                     se.sprite2.setVelX(se.sprite2.getVelX() * -1);
                     se.sprite2.setVelY(-1* se.sprite2.getVelY());
                 } else if (se.sprite2.getVelX() > 0 && se.sprite2.getVelY() > 0) {
@@ -45,6 +46,13 @@ public class topwall extends Sprite {
                     se.sprite2.setVelX(-se.sprite2.getVelX());
                 } 
             }
+            if (se.sprite2 instanceof Shooter) {
+                if(se.sprite2.getVelY() < 0 ) {
+                    se.sprite2.setY(getY() + getHeight()+1 );
+                } else if (se.sprite2.getVelY() > 0 ) {
+                    se.sprite2.setY(getY() - se.sprite2.getHeight()-1 ); 
+            }
         }
     }
+  }
 }

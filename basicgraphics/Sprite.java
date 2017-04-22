@@ -32,7 +32,7 @@ public class Sprite {
     }
     
     public Picture p;
-    private double velx, vely, x, y;
+    public double velx, vely, x, y;
     private boolean active = true;
     private int drawingPriority;
     private CollisionEventType inWall;

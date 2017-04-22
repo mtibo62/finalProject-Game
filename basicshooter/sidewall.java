@@ -8,6 +8,7 @@ import basicgraphics.images.Picture;
 import java.io.IOException;
 
 public class sidewall extends Sprite {
+
     static SpriteComponent se;
 
     public void init(SpriteComponent sc, int X, int Y) throws IOException {
@@ -17,12 +18,12 @@ public class sidewall extends Sprite {
         setPicture(new Picture("wall.png"));
         sc.addSprite(this);
     }
-    
-        @Override
+
+    @Override
     public void processEvent(SpriteCollisionEvent se) {
-    if (se.eventType == CollisionEventType.SPRITE) {
-                if (se.sprite2 instanceof Enemy) {
-                if(se.sprite2.getVelX() < 0 && se.sprite2.getVelY() == 0) {
+        if (se.eventType == CollisionEventType.SPRITE) {
+            if (se.sprite2 instanceof Enemy) {
+                if (se.sprite2.getVelX() < 0 && se.sprite2.getVelY() == 0) {
                     se.sprite2.setVelX(se.sprite2.getVelX() * -1);
                 } else if (se.sprite2.getVelX() > 0 && se.sprite2.getVelY() == 0) {
                     se.sprite2.setVelX(-se.sprite2.getVelX());
@@ -30,9 +31,10 @@ public class sidewall extends Sprite {
 //                    se.sprite2.setVelY(se.sprite2.getVelY() * -1);
 //                } else if (se.sprite2.getVelY() > 0 && se.sprite2.getVelX()==0) {
 //                    se.sprite2.setVelY(-1 * se.sprite2.getVelY());
-                } else if(se.sprite2.getVelX() < 0 && se.sprite2.getVelY() < 0) {
+                }
+                if (se.sprite2.getVelX() < 0 && se.sprite2.getVelY() < 0) {
                     se.sprite2.setVelX(se.sprite2.getVelX() * -1);
-                    se.sprite2.setVelY(-1* se.sprite2.getVelY());
+                    se.sprite2.setVelY(-1 * se.sprite2.getVelY());
                 } else if (se.sprite2.getVelX() > 0 && se.sprite2.getVelY() > 0) {
                     se.sprite2.setVelX(-se.sprite2.getVelX());
                     se.sprite2.setVelY(se.sprite2.getVelY() * -1);
@@ -42,7 +44,14 @@ public class sidewall extends Sprite {
                 } else if (se.sprite2.getVelX() > 0 && se.sprite2.getVelY() < 0) {
                     se.sprite2.setVelY(-1 * se.sprite2.getVelY());
                     se.sprite2.setVelX(-se.sprite2.getVelX());
-                } 
+                }
+            }
+            if (se.sprite2 instanceof Shooter) {
+                if (se.sprite2.getVelX() < 0) {
+                    se.sprite2.setX(getX() + getWidth() + 1);
+                } else if (se.sprite2.getVelX() > 0) {
+                    se.sprite2.setX(getX() - se.sprite2.getWidth() - 1);
+                }
             }
         }
     }

@@ -6,14 +6,9 @@ import basicgraphics.SpriteCollisionEvent;
 import basicgraphics.SpriteComponent;
 import basicgraphics.images.Picture;
 import basicgraphics.sounds.ReusableClip;
-import basicshooter.Control;
-import basicshooter.Game;
-import basicshooter.Shooter;
-import basicshooter.tophud;
 import java.applet.AudioClip;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class doubleshotup extends Sprite {
 
@@ -21,10 +16,15 @@ public class doubleshotup extends Sprite {
     SpriteComponent sc = new SpriteComponent();
     AudioClip clip2 = new ReusableClip("Door.wav");
 
-    public void init(SpriteComponent sc) throws IOException {
+    public void init(SpriteComponent sc, int X, int Y) throws IOException {
         SpriteComponent sprite;
-        setX(Game.RAND.nextInt(1000) + 450);
-        setY(Game.RAND.nextInt(1000) + 450);
+        if (X == 0 || Y == 0) {
+            setX(Game.RAND.nextInt(900) + 450);
+            setY(Game.RAND.nextInt(900) + 450);
+        } else {
+            setX(X);
+            setY(Y);
+        }
         setPicture(new Picture("doubleshotup.png"));
         sc.addSprite(this);
     }
@@ -41,7 +41,7 @@ public class doubleshotup extends Sprite {
 //                } catch (IOException ex) {
 //                    Logger.getLogger(speedupgrade.class.getName()).log(Level.SEVERE, null, ex);
 //                }
-                
+
                 setActive(false);
             }
         }

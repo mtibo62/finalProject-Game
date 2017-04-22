@@ -20,9 +20,14 @@ public class Upgrade extends Sprite {
     AudioClip clip2 = new ReusableClip("Door.wav");
     SpriteComponent sprite;
 
-    public void init(SpriteComponent sc) throws IOException {
-        setX(Game.RAND.nextInt(1000) + 450);
-        setY(Game.RAND.nextInt(1000) + 450);
+    public void init(SpriteComponent sc, int X, int Y) throws IOException {
+        if (X == 0 || Y == 0) {
+            setX(Game.RAND.nextInt(900) + 450);
+            setY(Game.RAND.nextInt(900) + 450);
+        } else {
+            setX(X);
+            setY(Y);
+        }
         setPicture(new Picture("shotup.png"));
         sc.addSprite(this);
     }
@@ -34,14 +39,14 @@ public class Upgrade extends Sprite {
                 red = false;
                 green = true;
                 clip2.play();
-                
+
                 final shotupicon si = new shotupicon();
                 try {
-                    si.init(sc,200, 20);
+                    si.init(sc, 200, 20);
                 } catch (IOException ex) {
                     Logger.getLogger(Upgrade.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
 //                final tophud h = new tophud();
 //                try {
 //                    h.init(sc, 0, 0);
@@ -50,7 +55,7 @@ public class Upgrade extends Sprite {
 //                }
                 Game.BULLET_COLOR = Color.green;
                 Bullet.damage = 2;
-                setActive(false);              
+                setActive(false);
             }
         }
     }

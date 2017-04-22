@@ -9,10 +9,10 @@ import java.io.IOException;
 
 public class Shooter extends Sprite {
 
-    public void init(SpriteComponent sc) throws IOException {
+    public void init(SpriteComponent sc, int X, int Y) throws IOException {
         SpriteComponent sprite;
-        setX(60);
-        setY(90);
+        setX(X);
+        setY(Y);
         setPicture(new Picture("greenrocket.png"));
         sc.addSprite(this);
         sprite = sc;
@@ -33,7 +33,6 @@ public class Shooter extends Sprite {
             if (ce.yhi) {
                 setVelY(0);
             }
-
         }
         if (ce.eventType == CollisionEventType.SPRITE) {
             if (ce.sprite2 instanceof tophud) {

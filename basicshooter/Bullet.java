@@ -70,16 +70,17 @@ class Bullet extends Sprite {
                 setVelY(-Y);
             }
             sc.addSprite(this);
-
         }
     }
 
     @Override
     public void processEvent(SpriteCollisionEvent se) {
-         if (se.eventType == CollisionEventType.WALL) {
+        if (se.eventType == CollisionEventType.WALL) {
             setActive(false);
-        } else {
-           // setActive(false);
+        }else if (se.eventType == CollisionEventType.SPRITE) {
+            if(se.sprite2 instanceof Wall){
+                setActive(false);
+            }
         }
     }
 
